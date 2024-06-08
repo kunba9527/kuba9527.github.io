@@ -41,3 +41,9 @@ jobs:
         git diff-index --quiet HEAD || git commit -m "Auto-generated Hexo static files"
         git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/kunba9527/kunba9527.github.io.git HEAD:public
         echo "Pushed changes to public branch"
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public

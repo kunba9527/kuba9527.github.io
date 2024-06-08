@@ -39,5 +39,5 @@ jobs:
         git config --local user.name "GitHub Actions"
         git add .
         git diff-index --quiet HEAD || git commit -m "Auto-generated Hexo static files"
-        git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/kunba9527/qexo.git HEAD:public
+        git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/kunba9527/kunba9527.github.io.git HEAD:public
         echo "Pushed changes to public branch"

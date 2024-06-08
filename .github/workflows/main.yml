@@ -1,0 +1,43 @@
+name: Deploy Hexo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate Hexo static files
+      run: |
+        npx hexo generate
+        echo "Generated files in public directory:"
+        ls -la public  # 确保 public 目录中有生成的文件
+
+    - name: Copy files to public branch
+      run: |
+        cp -r public/* .
+        echo "Copied files to public branch:"
+        ls -la
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add .
+        git diff-index --quiet HEAD || git commit -m "Auto-generated Hexo static files"
+        git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/kunba9527/qexo.git HEAD:public
+        echo "Pushed changes to public branch"

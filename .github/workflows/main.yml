@@ -23,27 +23,14 @@ jobs:
 
     - name: Generate Hexo static files
       run: |
+        git checkout public  # 切换到 public 分支
         npx hexo generate
         echo "Generated files in public directory:"
-        ls -la public  # 确保 public 目录中有生成的文件
+        ls -la  # 确保 public 目录中有生成的文件
 
-    - name: Copy files to public branch
-      run: |
-        cp -r public/* .
-        echo "Copied files to public branch:"
-        ls -la
-
-    - name: Commit and push changes
-      run: |
-        git config --local user.email "actions@github.com"
-        git config --local user.name "GitHub Actions"
-        git add .
-        git diff-index --quiet HEAD || git commit -m "Auto-generated Hexo static files"
-        git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/kunba9527/kunba9527.github.io.git HEAD:public
-        echo "Pushed changes to public branch"
-        
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./public
+        cname: your-custom-domain.com  # 如果有自定义域名，请在此处填写
